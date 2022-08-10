@@ -1,11 +1,14 @@
 package com.victor2022.spider.downloader;
 
 import com.victor2022.spider.infos.DownloadInfo;
+import com.victor2022.spider.props.PropertiesHandler;
+import com.victor2022.spider.props.RecordHandler;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.*;
 
 /**
@@ -16,22 +19,32 @@ import java.util.concurrent.*;
 @Slf4j
 public abstract class AbstractDownloader implements Downloader {
 
+    private static final String KEY_QUEUE_SIZE = "queue-size";
+
     // 默认队列长度
-    private static final int MAX_QUEUE_SIZE = 50;
+    protected int maxQueueSize = 50;
     protected BlockingQueue<DownloadInfo> tasks;
     protected DownloadInfo lastSubmittedInfo;
     protected List<String> submittedTaskId = new ArrayList<>();
     private boolean isStarted = false;
+    private Properties prop;
 
     public AbstractDownloader() {
-        tasks = new ArrayBlockingQueue<>(MAX_QUEUE_SIZE);
+        loadProp();
+        tasks = new ArrayBlockingQueue<>(maxQueueSize);
         log.info("Downloader has been created...");
     }
 
     public AbstractDownloader(int queueSize) {
+        loadProp();
         if (queueSize <= 0) throw new RuntimeException("Queue size must higher than zero!");
         tasks = new LinkedBlockingQueue<>(queueSize);
         log.info("Downloader has been created...");
+    }
+
+    private void loadProp(){
+        this.prop = PropertiesHandler.getProperties();
+        this.maxQueueSize = Integer.parseInt((String) prop.getOrDefault(KEY_QUEUE_SIZE,String.valueOf(maxQueueSize)));
     }
 
     /**

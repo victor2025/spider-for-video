@@ -5,5 +5,6 @@ end=10500
 prefix=https://www.yingav20.com/get_file/1/25d7ad001a65119048c6abac5e32a5dfc217d0f194/
 suffix=.mp4
 #path=/home/victor2022/下载/aria2/videos
-path=F:\\Files_for_lhw\\Projects\\Java\\videos
+path=F:\\Files_for_lhw\\Projects\\Java\\test\\videos
 type=mp4
+queue-size=10

@@ -20,10 +20,11 @@ public class DownloadInfo {
 
     private String id;
     private String url;
-    private String path;
     private String filename;
+    private String path;
     private String suffix;
     private String mark;
+    private List<DownloadInfo> addons = new ArrayList<>();
 
     public String[] getUrlArray(){
         return new String[]{url};

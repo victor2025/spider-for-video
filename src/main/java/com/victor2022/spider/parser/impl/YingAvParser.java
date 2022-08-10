@@ -13,9 +13,9 @@ import org.jsoup.select.Elements;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,6 +29,7 @@ public class YingAvParser implements DownloadInfoParser {
     private String prefix = "https://www.yingav20.com/videos/";
     private String suffix = "/0/";
     private static String INFO_FILE_NAME = "detail.txt";
+    private String dirNameKey = "分类";
 
     @Override
     public DownloadInfo parse(DownloadInfo info) {
@@ -41,26 +42,66 @@ public class YingAvParser implements DownloadInfoParser {
             // 解析数据
             doc = Jsoup.parse(new URL(url), 60000);
         } catch (IOException e) {
-            //重试一遍
-            try {
-                doc = Jsoup.parse(new URL(url), 60000);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            e.printStackTrace();
         }
+        List<String> imgList = null;
         if(doc!=null){
             // 获取文件名
             getTitle(doc, paraMap);
             // 获取分类
             getVideoInfo(doc, paraMap);
+            // 获取图片列表
+            imgList = getImgList(doc);
         }
         // 添加到下载信息中
-        String path = info.getPath()+"/"+paraMap.getOrDefault("分类","default")+"/"+info.getId()+"-"+paraMap.getOrDefault("title",info.getId());
+        String path = info.getPath()+"/"+paraMap.getOrDefault(dirNameKey,"default")+"/"+info.getId()+"-"+paraMap.getOrDefault("title",info.getId());
         info.setPath(path);
         info.setFilename(paraMap.getOrDefault("title",info.getId())+info.getSuffix());
+        // 处理附加文件
+        processAddons(info,imgList);
         // 写入细节
         writeDetail(path,paraMap);
         return info;
+    }
+
+    /**
+     * @param info:
+     * @param list:
+     * @return: void
+     * @author: lihen
+     * @date: 2022/8/10 21:22
+     * @description: 处理附加
+     */
+    private void processAddons(DownloadInfo info, List<String> list){
+        // 保险判断
+        if(list==null) return;
+        List<DownloadInfo> addons = info.getAddons();
+        String imgSuf = ".jpg";
+        for(int i = 0; i<list.size(); i++){
+            String url = list.get(i);
+            DownloadInfo imgInfo = new DownloadInfo().setPath(info.getPath())
+                    .setFilename(i + imgSuf)
+                    .setUrl(url);
+            addons.add(imgInfo);
+        }
+    }
+
+    /**
+     * @param doc:
+     * @return: java.util.List<java.lang.String>
+     * @author: lihen
+     * @date: 2022/8/10 21:20
+     * @description: 获取图片url列表
+     */
+    private List<String> getImgList(Document doc) {
+        List<String> list = new ArrayList<>();
+        // 处理图片
+        Elements elements = doc.getElementsByClass("list_screen").get(0).getElementsByTag("img");
+        for(Element ele : elements){
+            String url = ele.attributes().get("data-original");
+            list.add(url);
+        }
+        return list;
     }
 
     /**

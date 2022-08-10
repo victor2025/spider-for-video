@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -23,6 +24,8 @@ public class Aria2Downloader extends AbstractDownloader {
     private static final String KEY_WAITING_NUM = "numWaiting";
     private static final String KEY_CNT = "cnt";
     private static final String KEY_MARK = "mark";
+    private static final String KEY_RPC_ADDRESS = "rpc-address";
+
 
     // aria2远程调用地址
     private String rpcAddress = "http://localhost:6800/jsonrpc";
@@ -52,6 +55,7 @@ public class Aria2Downloader extends AbstractDownloader {
     private void loadRec(){
         this.rec = RecordHandler.getRec();
         this.totalCnt = Integer.parseInt((String) rec.getOrDefault(KEY_CNT,"0"));
+        if(rec.contains(KEY_RPC_ADDRESS))this.rpcAddress = (String) rec.get(KEY_RPC_ADDRESS);
     }
 
     public void setMaxNumAlive(int num) {
@@ -72,13 +76,31 @@ public class Aria2Downloader extends AbstractDownloader {
             throw new RuntimeException(e);
         }
         // 提交下载任务
-        Aria2Response resp = handler.submitTask(info);
+        Aria2Response resp = doSubmitTask(info);
         if(!"0".equals(resp.getError())){
             return false;
         }
         // 记录已经提交的数据
         if(resp.getResult()!=null) this.submittedTaskId.addAll(resp.getResult());
         return true;
+    }
+
+    /**
+     * @param info:
+     * @return: void
+     * @author: lihen
+     * @date: 2022/8/10 21:08
+     * @description: 实际进行提交的方法
+     */
+    private Aria2Response doSubmitTask(DownloadInfo info){
+        // 处理主任务
+        Aria2Response resp = handler.submitTask(info);
+        // 处理附加任务，递归处理
+        List<DownloadInfo> addOns = info.getAddons();
+        for(DownloadInfo i : addOns){
+            doSubmitTask(i);
+        }
+        return resp;
     }
 
     @Override
