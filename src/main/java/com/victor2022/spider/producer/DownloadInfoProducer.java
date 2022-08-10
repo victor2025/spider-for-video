@@ -4,6 +4,7 @@ import com.victor2022.spider.infos.DownloadInfo;
 import com.victor2022.spider.parser.DownloadInfoParser;
 import com.victor2022.spider.props.PropertiesHandler;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Properties;
 
@@ -12,6 +13,7 @@ import java.util.Properties;
  * @date: 2022/08/09  下午7:49
  * @description:
  */
+@Slf4j
 public abstract class DownloadInfoProducer {
 
     private static final String KEY_PATH = "path";
@@ -33,6 +35,7 @@ public abstract class DownloadInfoProducer {
         this.prop = PropertiesHandler.getProperties();
         if(prop.containsKey(KEY_PATH))this.basePath = prop.getProperty(KEY_PATH);
         if(prop.containsKey(KEY_TYPE))this.type = prop.getProperty(KEY_TYPE);
+        log.info("DownloadInfoProducer has been created...");
     }
 
     public DownloadInfo getNext(){

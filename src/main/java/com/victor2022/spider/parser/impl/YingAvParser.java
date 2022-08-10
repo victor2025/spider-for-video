@@ -3,6 +3,7 @@ package com.victor2022.spider.parser.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.victor2022.spider.infos.DownloadInfo;
 import com.victor2022.spider.parser.DownloadInfoParser;
+import com.victor2022.spider.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -125,6 +126,7 @@ public class YingAvParser implements DownloadInfoParser {
     private void getTitle(Document doc, Map<String,String> map){
         // 开始解析
         String title = doc.getElementsByTag("title").get(0).text();
+        title = StringUtils.removeSpecialChar(title);
         if(title!=null){
             map.put("title",title);
         }

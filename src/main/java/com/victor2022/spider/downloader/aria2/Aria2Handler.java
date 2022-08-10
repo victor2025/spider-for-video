@@ -154,6 +154,12 @@ public class Aria2Handler {
      * @description: 解析结果
      */
     private Aria2Response parseResult(String str, boolean parseMap){
+        // 若字符为空，则检查连接，并返回空对象
+        if(str==null){
+            log.error("Aria2 downloader is not connected, please check again!!!");
+            return new Aria2Response();
+        }
+        // 正常处理
         Aria2Response response = JSON.parseObject(str, Aria2Response.class);
         if(parseMap&&!response.getResult().isEmpty()){
             for(String s:response.getResult()){

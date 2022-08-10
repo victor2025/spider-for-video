@@ -17,7 +17,7 @@ import java.util.concurrent.*;
 public abstract class AbstractDownloader implements Downloader {
 
     // 默认队列长度
-    private static final int MAX_QUEUE_SIZE = 100;
+    private static final int MAX_QUEUE_SIZE = 50;
     protected BlockingQueue<DownloadInfo> tasks;
     protected DownloadInfo lastSubmittedInfo;
     protected List<String> submittedTaskId = new ArrayList<>();
@@ -25,11 +25,13 @@ public abstract class AbstractDownloader implements Downloader {
 
     public AbstractDownloader() {
         tasks = new ArrayBlockingQueue<>(MAX_QUEUE_SIZE);
+        log.info("Downloader has been created...");
     }
 
     public AbstractDownloader(int queueSize) {
         if (queueSize <= 0) throw new RuntimeException("Queue size must higher than zero!");
         tasks = new LinkedBlockingQueue<>(queueSize);
+        log.info("Downloader has been created...");
     }
 
     /**
@@ -40,21 +42,26 @@ public abstract class AbstractDownloader implements Downloader {
      */
     public void start() {
         Runnable runnable = new Runnable() {
-            @SneakyThrows
             @Override
             public void run() {
-                // 循环取数据
-                while (!tasks.isEmpty()) {
-                    // 取出一个下载任务
-                    DownloadInfo info = tasks.take();
-                    lastSubmittedInfo = info;
-                    // 交给任务下载器处理
-                    if(submitTask(info)){
-                        saveState(info);
+                try {
+                    // 循环取数据
+                    while (!tasks.isEmpty()) {
+                        // 取出一个下载任务
+                        DownloadInfo info = tasks.take();
+                        lastSubmittedInfo = info;
+                        // 交给任务下载器处理
+                        if(submitTask(info)){
+                            saveState(info);
+                        }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    log.warn("Downloader seems not connected, please check again!!!");
+                } finally {
+                    // 完成后将开关置为false
+                    isStarted = false;
                 }
-                // 完成后将开关置为false
-                isStarted = false;
             }
 
         };
