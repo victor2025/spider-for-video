@@ -19,8 +19,8 @@ public abstract class DownloadInfoProducer {
     private static final String KEY_PATH = "path";
     private static final String KEY_TYPE = "type";
 
-    protected String basePath = "{HOME}/下载/aria2";
-    protected String type = ".mp4";
+    protected String basePath = ".downloads";
+    protected String type = ".sfv";
     protected UrlProducer urlProducer;
     protected DownloadInfoParser parser;
     protected Properties prop;

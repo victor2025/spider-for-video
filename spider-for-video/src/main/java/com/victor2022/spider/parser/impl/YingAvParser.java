@@ -142,8 +142,18 @@ public class YingAvParser implements DownloadInfoParser {
         }
     }
 
+    /**
+     * @param doc:
+     * @param map:
+     * @return: void
+     * @author: lihen
+     * @date: 2022/8/12 12:48
+     * @description: 获取视频信息
+     */
     private void getVideoInfo(Document doc, Map<String,String> map) {
         String duration = doc.getElementsByClass("details_list").get(0).getElementsByClass("item").get(0).child(0).text();
+        // 获取时长信息
+        map.put("时长",duration);
         // 获取分类信息
         Elements detailItems = doc.getElementsByClass("details_items").get(0).getElementsByClass("col");
         for(Element ele : detailItems){

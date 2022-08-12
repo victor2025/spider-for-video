@@ -1,0 +1,12 @@
+# Record file for spider
+# Wed Aug 10 09:34:45 CST 2022
+start=10000
+end=10500
+prefix=https://www.yingav20.com/get_file/1/25d7ad001a65119048c6abac5e32a5dfc217d0f194/
+suffix=.mp4
+path=.videos
+type=mp4
+# downloader configuration
+queue-size=30
+rpc-address=http://localhost:6800/jsonrpc
+max-alive=20

@@ -25,6 +25,7 @@ public class Aria2Downloader extends AbstractDownloader {
     private static final String KEY_CNT = "cnt";
     private static final String KEY_MARK = "mark";
     private static final String KEY_RPC_ADDRESS = "rpc-address";
+    private static final String KEY_MAX_ALIVE = "max-alive";
 
 
     // aria2远程调用地址
@@ -38,12 +39,14 @@ public class Aria2Downloader extends AbstractDownloader {
     public Aria2Downloader() {
         this.handler = new Aria2Handler(rpcAddress);
         loadRec();
+        loadProp();
     }
 
     public Aria2Downloader(String rpcAddress) {
         this.rpcAddress = rpcAddress;
         this.handler = new Aria2Handler(rpcAddress);
         loadRec();
+        loadProp();
     }
 
     /**
@@ -56,6 +59,17 @@ public class Aria2Downloader extends AbstractDownloader {
         this.rec = RecordHandler.getRec();
         this.totalCnt = Integer.parseInt((String) rec.getOrDefault(KEY_CNT,"0"));
         if(rec.contains(KEY_RPC_ADDRESS))this.rpcAddress = (String) rec.get(KEY_RPC_ADDRESS);
+    }
+
+    /**
+     * @return: void
+     * @author: lihen
+     * @date: 2022/8/12 12:36
+     * @description: 读取配置
+     */
+    private void loadProp(){
+        this.rpcAddress = (String) prop.getOrDefault(KEY_RPC_ADDRESS,this.rpcAddress);
+        this.maxNumAlive = Integer.parseInt((String) prop.getOrDefault(KEY_MAX_ALIVE,String.valueOf(this.maxNumAlive)));
     }
 
     public void setMaxNumAlive(int num) {

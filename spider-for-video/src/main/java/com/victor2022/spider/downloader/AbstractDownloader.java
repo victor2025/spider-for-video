@@ -27,7 +27,7 @@ public abstract class AbstractDownloader implements Downloader {
     protected DownloadInfo lastSubmittedInfo;
     protected List<String> submittedTaskId = new ArrayList<>();
     private boolean isStarted = false;
-    private Properties prop;
+    protected Properties prop;
 
     public AbstractDownloader() {
         loadProp();

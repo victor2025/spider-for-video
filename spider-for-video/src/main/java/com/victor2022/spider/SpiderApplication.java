@@ -7,6 +7,8 @@ import com.victor2022.spider.producer.DownloadInfoProducer;
 import com.victor2022.spider.producer.impl.YingAvDownloadInfoProducer;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Scanner;
+
 /**
  * @author: victor2022
  * @date: 2022/08/09  下午4:12
@@ -27,7 +29,8 @@ public class SpiderApplication {
             downloader.download(info);
         }
         // 处理完成
-        System.out.println("done");
+        System.out.println("Press enter to exit...");
+        new Scanner(System.in).nextLine();
     }
 
 }
