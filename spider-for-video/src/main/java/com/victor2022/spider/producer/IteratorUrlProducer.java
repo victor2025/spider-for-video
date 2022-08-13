@@ -44,7 +44,13 @@ public abstract class IteratorUrlProducer implements UrlProducer {
         if (prop.containsKey(KEY_START)) this.start = Integer.parseInt((String) prop.get(KEY_START));
         if (prop.containsKey(KEY_END)) this.end = Integer.parseInt((String) prop.get(KEY_END));
         // 设置指针
-        this.ptr = Integer.parseInt((String) rec.getOrDefault(KEY_PTR,String.valueOf(this.start)));
+        if(rec.containsKey(KEY_PTR)){
+            // 若有指针，就从下一个开始
+            this.ptr = Integer.parseInt((String) rec.get(KEY_PTR))+1;
+        }else{
+            // 否则从start开始
+            this.ptr = this.start;
+        }
     }
 
     protected abstract String processPrefix();
