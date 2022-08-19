@@ -16,11 +16,21 @@ cp -r ./aria2 $dirname/aria2
 cp spider-for-video.jar $dirname/spider-for-video.jar
 cp spider-prop $dirname/spider-prop
 cp spider-rec $dirname/spider-rec
-cp start.cmd $dirname/start.cmd
+# 判断执行脚本
+if [ "$osname" == "win" ]
+then
+	cp start.cmd $dirname/start.cmd
+	rm $dirname/aria2/aria2c
+elif [ "$osname" == "linux" ]
+then
+	cp start.sh $dirname/start.sh
+	rm $dirname/aria2/aria2c.exe
+fi
 # 压缩
 tar -czvf $dirname.tar.gz $dirname
 rm -r $dirname
 # 移动文件夹
+mkdir ../release
 mkdir ../release/$version
 # rm -r ../release/$1/$dirname
 mv $dirname.tar.gz ../release/$version/$dirname.tar.gz
