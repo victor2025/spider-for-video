@@ -2,8 +2,10 @@ package com.victor2022.test;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.junit.Test;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -13,7 +15,8 @@ import java.net.URL;
  */
 public class TestParseHtml {
 
-    public static void main(String[] args) throws IOException {
+    @Test
+    public void testParse() throws IOException {
         String url = "https://www.yingav20.com/videos/11013/0/";
         Document doc = Jsoup.parse(new URL(url), 10000);
         System.out.println("done");

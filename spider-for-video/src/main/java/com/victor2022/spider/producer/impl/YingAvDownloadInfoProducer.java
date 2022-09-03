@@ -34,7 +34,7 @@ public class YingAvDownloadInfoProducer extends DownloadInfoProducer {
     }
 
     @Override
-    protected String getPath() {
+    protected String getBasePath() {
         return this.basePath;
     }
 

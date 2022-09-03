@@ -3,9 +3,9 @@ package com.victor2022.spider.producer;
 import com.victor2022.spider.infos.DownloadInfo;
 import com.victor2022.spider.parser.DownloadInfoParser;
 import com.victor2022.spider.props.PropertiesHandler;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.File;
 import java.util.Properties;
 
 /**
@@ -28,7 +28,7 @@ public abstract class DownloadInfoProducer {
     protected abstract String getUrl();
     protected abstract String getId();
     protected abstract String getSuffix();
-    protected abstract String getPath();
+    protected abstract String getBasePath();
     protected abstract String getMark();
 
     public DownloadInfoProducer(){
@@ -40,13 +40,24 @@ public abstract class DownloadInfoProducer {
 
     public DownloadInfo getNext(){
         DownloadInfo info = new DownloadInfo()
-                .setPath(getPath())
+                .setPath(getAbsoluteBasePath())
                 .setUrl(getUrl())
                 .setId(getId())
                 .setSuffix(getSuffix())
                 .setMark(getMark());
         // 解析当前配置数据
         return parser.parse(info);
+    }
+
+    /**
+     * @return: java.lang.String
+     * @author: lihen
+     * @date: 2022/9/3 12:22
+     * @description: 获取绝对路径
+     */
+    private String getAbsoluteBasePath(){
+        String basePath = getBasePath();
+        return new File(basePath).getAbsolutePath();
     }
 
     public boolean hasNext(){

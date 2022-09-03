@@ -21,8 +21,7 @@ if [ "$osname" == "win" ]
 then
 	cp start.cmd $dirname/start.cmd
 	rm $dirname/aria2/aria2c
-elif [ "$osname" == "linux" ]
-then
+else
 	cp start.sh $dirname/start.sh
 	rm $dirname/aria2/aria2c.exe
 fi
