@@ -20,6 +20,7 @@ cp spider-rec $dirname/spider-rec
 if [ "$osname" == "win" ]
 then
 	cp start.cmd $dirname/start.cmd
+	cp clear.cmd $dirname/clear.cmd
 	rm $dirname/aria2/aria2c
 else
 	cp start.sh $dirname/start.sh
