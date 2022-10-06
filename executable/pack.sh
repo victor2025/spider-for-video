@@ -23,6 +23,7 @@ then
 	rm $dirname/aria2/aria2c
 else
 	cp start.sh $dirname/start.sh
+	cp clear.sh $dirname/clear.sh
 	rm $dirname/aria2/aria2c.exe
 fi
 # 压缩
