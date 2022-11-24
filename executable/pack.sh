@@ -29,9 +29,24 @@ else
 fi
 # 压缩
 tar -czvf $dirname.tar.gz $dirname
-rm -r $dirname
 # 移动文件夹
 mkdir ../release
 mkdir ../release/$version
 # rm -r ../release/$1/$dirname
 mv $dirname.tar.gz ../release/$version/$dirname.tar.gz
+# 带jre版本
+if [ "$osname" == "win" ]
+then
+	rm $dirname/start.cmd
+	cp start-jre.cmd $dirname/start.cmd
+	cp -r ./jre $dirname/jre
+	# 重命名
+	dirname_jre=spider-for-video-$osname-$archname-jre-$version
+	mv $dirname $dirname_jre
+	# 压缩
+	tar -czvf $dirname_jre.tar.gz $dirname_jre
+	mv $dirname_jre.tar.gz ../release/$version/$dirname_jre.tar.gz
+	rm -r $dirname_jre
+else
+	rm -r $dirname
+fi
