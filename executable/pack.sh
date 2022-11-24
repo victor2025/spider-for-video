@@ -9,6 +9,7 @@ fi
 archname=$(uname -m|tr A-Z a-z)
 version=$(git describe --tags `git rev-list --tags --max-count=1`)
 dirname=spider-for-video-$osname-$archname-$version
+readme=../readme.md
 # 编译打包
 # 移动文件
 mkdir $dirname
@@ -16,6 +17,7 @@ cp -r ./aria2 $dirname/aria2
 cp spider-for-video.jar $dirname/spider-for-video.jar
 cp spider-prop $dirname/spider-prop
 cp spider-rec $dirname/spider-rec
+cp $readme $dirname/readme.md
 # 判断执行脚本
 if [ "$osname" == "win" ]
 then
