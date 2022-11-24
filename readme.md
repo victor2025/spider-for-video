@@ -1,5 +1,12 @@
 # Spider-for-video
 
+<p align="left">
+  <a href="https://github.com/victor2025/spider-for-video/releases">
+    <img src="https://img.shields.io/github/release/victor2025/spider-for-video/all.svg?style=flat-square">
+  </a>
+
+</p>
+
 ## 介绍
 - spider for videos in some website
 - 采用jdk1.8编写，需要java运行时环境
